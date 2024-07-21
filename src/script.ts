@@ -1,7 +1,8 @@
-import { Scene, Mesh, SphereGeometry, MeshStandardMaterial, AmbientLight, DirectionalLight, PerspectiveCamera, WebGLRenderer, AxesHelper, PlaneGeometry, Group, BoxGeometry, Vector3, ConeGeometry, TextureLoader, RepeatWrapping, SRGBColorSpace, PointLight, PCFShadowMap, PCFSoftShadowMap } from 'three';
+import { Scene, Mesh, SphereGeometry, MeshStandardMaterial, AmbientLight, DirectionalLight, PerspectiveCamera, WebGLRenderer, AxesHelper, PlaneGeometry, Group, BoxGeometry, Vector3, ConeGeometry, TextureLoader, RepeatWrapping, SRGBColorSpace, PointLight, PCFShadowMap, PCFSoftShadowMap, Fog, FogExp2 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { Timer } from 'three/addons/misc/Timer.js'
-import GUI from 'lil-gui'
+import GUI from 'lil-gui';
+import { Sky } from 'three/addons/objects/Sky.js';
 
 /**
  * Base
@@ -392,6 +393,25 @@ ghost2.shadow.camera.far = 10;
 ghost3.shadow.mapSize.width = 256;
 ghost3.shadow.mapSize.height = 256;
 ghost3.shadow.camera.far = 10;
+
+/**
+ * Sky
+ */
+const sky = new Sky();
+sky.scale.setScalar(100);
+scene.add(sky);
+
+sky.material.uniforms['turbidity'].value = 10;
+sky.material.uniforms['rayleigh'].value = 3;
+sky.material.uniforms['mieCoefficient'].value = 0.01;
+sky.material.uniforms['mieDirectionalG'].value = 0.95;
+sky.material.uniforms['sunPosition'].value.set(0.3, -0.038, -0.95);
+
+/**
+ * Fog
+ */
+// scene.fog = new Fog('#262837', 1, 15);
+scene.fog = new FogExp2('#262837', 0.1);
 
 /**
  * Animate
